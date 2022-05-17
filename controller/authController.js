@@ -97,7 +97,7 @@ router.put("/forgot",(req,res)=>{
                              }
                          },(err,result)=>{
                              if(err) throw err;
-                             res.status(200).send({auth:true,token:"Password Reset Successfully"})
+                             res.status(200).send({auth:true,token:"Password Reset Successfully",result})
                          }
               
           )

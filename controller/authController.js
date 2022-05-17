@@ -79,32 +79,35 @@ router.delete("/delete",(req,res)=>{
     })
 })
 
-// forget Password
-// router.get('/forgetpassword',(req,res)=>{
-//     try {
-//         if({auth:false}){
-//            res.render('forget')
-//         }
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-   
-   
-// })
-// router.post('/forget',async (req,res)=>{
-//     try {
-//         const email=req.body.email;
-//         const user= await User.findOne({email:email});
-//         if(userData){
-            
-//         }
-//         else{
-//             res.render('forget',{message:"User mail is incorrect"})
-//         }
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// })
-// forget Password ends
+router.put("/forgot",(req,res)=>{
+    let email=req.body.email;
+    let password=req.body.password;
+   User.findOne({email},(err,user)=>{
+       if(err){
+         return  res.status(500).send("Error")
+       }
+       if(!user){
+          return  res.status(200).send("User Not Found Register First")
+       }else{
+          const newPassword=bcrypt.hashSync(password,8);
+          user.updateOne(
+              {
+                             $set:{
+                                 "password":newPassword
+                             }
+                         },(err,result)=>{
+                             if(err) throw err;
+                             res.send("Password is successfully resetted")
+                         }
+              
+          )
+      
+  
+          
+          
+       }
+  
+   })
+  })
 
 module.exports=router;

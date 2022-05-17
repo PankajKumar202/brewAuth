@@ -12,4 +12,7 @@ Local Link:localhost:7800/api/auth/login
 for register
 Local Link:localhost:7800/api/auth/register
 [create - token]
+for forgot password
+Local link:localhost:7800/api/auth/forgot
+heroku link:
 

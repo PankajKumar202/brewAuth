@@ -84,10 +84,10 @@ router.put("/forgot",(req,res)=>{
     let password=req.body.password;
    User.findOne({email},(err,user)=>{
        if(err){
-         return  res.status(500).send("Error")
+         return  res.status(500).send({auth:false,token:"Error"})
        }
        if(!user){
-          return  res.status(200).send("User Not Found Register First")
+          return  res.status(200).send({auth:false,token:"User Not Found Register First"})
        }else{
           const newPassword=bcrypt.hashSync(password,8);
           user.updateOne(
@@ -97,7 +97,7 @@ router.put("/forgot",(req,res)=>{
                              }
                          },(err,result)=>{
                              if(err) throw err;
-                             res.send("Password is successfully resetted")
+                             res.send("Password reset succesfully",result)
                          }
               
           )

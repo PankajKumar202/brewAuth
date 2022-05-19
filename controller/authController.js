@@ -20,11 +20,11 @@ router.get('/users',(req,res)=>{
 
 //Register
 router.post('/register',(req,res)=>{
-    // let hashPassword=bcrypt.hashSync(req.body.password,8);
+    let hashPassword=bcrypt.hashSync(req.body.password,8);
     User.create({
         name:req.body.name,
         email:req.body.email,
-        password:req.body.password,
+        password:hashPassword,
         phone:req.body.phone,
         role:req.body.role?req.body.role:"User",
         
@@ -44,9 +44,9 @@ router.post('/login',(req,res)=>{
         if(!user){
             return res.status(200).send({auth:false,token:"No user Found Register First"})
         }else{
-            // const passIsValid=compareSync(req.body.password,user.password)
-            if(req.body.password !== user.password){
-                return res.status(200).send({auth:false,token:"Wrong Password",typedPassword:req.body.password,storedPassword:user.password})
+            const passIsValid=compareSync(req.body.password,user.password)
+            if(!passIsValid){
+                return res.status(200).send({auth:false,token:"Wrong Password"})
             }else{
                 let token=jwt.sign({id:user._id},config.secret,{expiresIn:86400})
                 res.status(200).send({auth:true,token:token})
@@ -89,11 +89,11 @@ router.put("/forgot",(req,res)=>{
        if(!user){
           return  res.status(200).send({auth:false,token:"User Not Found Register First"})
        }else{
-        //   const newPassword=bcrypt.hashSync(password,8);
+          const newPassword=bcrypt.hashSync(password,8);
           user.updateOne(
               {
                              $set:{
-                                 "password":password
+                                 "password":newPassword
                              }
                          },(err,result)=>{
                              if(err) throw err;

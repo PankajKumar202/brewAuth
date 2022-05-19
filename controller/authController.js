@@ -44,7 +44,7 @@ router.post('/login',(req,res)=>{
         if(!user){
             return res.status(200).send({auth:false,token:"No user Found Register First"})
         }else{
-            const passIsValid=compareSync(req.body.password,user.password)
+            const passIsValid=bcrypt.compareSync(req.body.password,user.password)
             if(!passIsValid){
                 return res.status(200).send({auth:false,token:"Wrong Password"})
             }else{
